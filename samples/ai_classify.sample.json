@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "task": "请为下面每个 skill 填写 category（分类名）、description（一句中文简介）、note（选填备注）。description 不要照抄 source_description，用你自己的话一句话讲清楚它做什么、何时用。source_description 与 needs 仅供你参考，不要改。只输出并更新这份 JSON 文件即可，不要额外解释。",
+  "generated_by": "AI",
+  "generated_at": "",
+  "skills": {
+    "godot-master": {
+      "source_description": "Consolidated expert library for professional Godot 4.7+ game and application development. Orchestrates 92 Domain Skills through architectural workflows, anti-pattern catalogs, performance budgets, and Server API patterns. Primary entry point for ALL Godot development tasks.",
+      "source_category": "",
+      "needs": "分类+简介",
+      "category": "Godot-主入口",
+      "description": "Godot 4.7+ 综合专家库，统筹 92 个领域 skill。新项目、架构、性能、多人都从这里进。",
+      "note": "最高优先级的入口 skill"
+    },
+    "godot-2d-physics": {
+      "source_description": "Expert patterns for Godot 2D physics including collision layers/masks, Area2D triggers, raycasting, and PhysicsDirectSpaceState2D queries. Use when implementing collision detection, trigger zones, line-of-sight systems, or manual physics queries.",
+      "source_category": "",
+      "needs": "分类+简介",
+      "category": "Godot-物理",
+      "description": "2D 碰撞层/掩码、Area2D 触发器、射线检测与手动物理查询。",
+      "note": "碰撞判定基础"
+    },
+    "godot-tweening": {
+      "source_description": "Expert blueprint for programmatic animation using Tween for smooth property transitions, UI effects, camera movements, and juice. Covers easing functions, parallel tweens, chaining, and lifecycle management.",
+      "source_category": "",
+      "needs": "分类+简介",
+      "category": "Godot-动画",
+      "description": "Tween 程序化动画：UI 效果、镜头移动、缓动曲线与链式调用。",
+      "note": "做 UI 动画常用"
+    }
+  }
+}
