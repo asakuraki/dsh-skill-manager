@@ -32,6 +32,25 @@ DSH 读取用户级 skill 根目录（默认 `~\.dsh\skills`，可用环境变�
 
 需要 Python 3，无第三方依赖。下载后直接运行 `skill_manager.py` 即可。
 
+> **可选图形界面**：`skill_manager_gui.py` 提供图形窗口（基于 **PySide6**）。使用前需把 PySide6 装进本地 `.venv`，然后双击 `skill-manager-gui.bat`（或运行 `python skill_manager_gui.py`）。
+
+## 图形界面（可选）
+
+双击 **`skill-manager-gui.bat`** 即可打开管理器窗口（需已安装 PySide6）。
+
+- 左侧文件夹式分类树；右侧每个 skill 一张卡片，简介突出，卡片右上角开关一键启停。
+- 点击卡片可改名 / 改简介 / 换分类 / 写备注（只存工具自己的 `data\` 档案，绝不改原 `SKILL.md`）。
+- 搜索框、分类筛选、收藏图钉、拖放归类、白天/黑夜/随系统主题。
+- **AI 整理**：用「①生成AI任务」导出待分类 skill，再把 AI 填好的文件用「②导入AI结果」并入。
+
+安装图形界面依赖（一次即可）：
+
+```powershell
+.venv\Scripts\python.exe -m pip install PySide6
+```
+
+> 本仓库的 CLI 不依赖 PySide6，可独立使用；GUI 是可选项。
+
 ## 使用
 
 ```powershell

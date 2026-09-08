@@ -34,6 +34,25 @@ Your archive (categories, notes, favorites, AI descriptions) is stored **only in
 
 Requires Python 3. No third-party packages. Clone or download and run `skill_manager.py`.
 
+> **Optional GUI**: `skill_manager_gui.py` provides a graphical window (built on **PySide6**). To use it, install PySide6 into the local `.venv` and launch via `skill-manager-gui.bat` (or `python skill_manager_gui.py`).
+
+## GUI
+
+Double-click **`skill-manager-gui.bat`** to open the manager window (PySide6 must be installed — see below).
+
+- Folder-style category tree on the left; each skill is a card on the right with its description highlighted and a one-click enable/disable switch on the top-right.
+- Click a card to edit its display name / description / category / note (stored only in the tool's own `data\` archive — never touches the original `SKILL.md`).
+- Search box, category filter, favorites pin, drag-and-drop to categorize, and light / dark / system themes.
+- **AI 整理**: use the "AI task" step to export unclassified skills, then "Import AI result" to merge the AI-filled JSON.
+
+To install the GUI dependency (once):
+
+```powershell
+.venv\Scripts\python.exe -m pip install PySide6
+```
+
+> The CLI in this repo is fully functional without PySide6; the GUI is optional.
+
 ## Usage
 
 ```powershell
