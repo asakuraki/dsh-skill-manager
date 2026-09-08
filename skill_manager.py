@@ -48,6 +48,155 @@ DATA_DIRNAME = "data"
 ARCHIVE_FILENAME = "archive.json"
 CONFIG_FILENAME = "config.json"
 
+# ---------------------------------------------------------------------------
+# 国际化 / 语言切换 (i18n)
+# ---------------------------------------------------------------------------
+# 全局语言：zh (中文) 或 en (English)。优先级：--lang 参数 > data/config.json 的
+# lang 键 > 环境变量 DSH_SKILLS_LANG > 默认 zh。
+LANG = "zh"
+
+# 常用 UI 字符串表（其余动态拼接/命令输出用 T()/TF()）
+_STR = {
+    "zh": {
+        "enabled": "已启用",
+        "disabled": "已屏蔽",
+        "tag_on": "[开]",
+        "tag_off": "[关]",
+        "uncategorized": "未分类",
+        "no_description": "（无简介）",
+        "desc_from_ai": "AI",
+        "desc_from_skillmd": "SKILL.md",
+        "not_found": "✗ 找不到 skill: {0}",
+        "multiple_match": "⚠ 存在多个同名字面量匹配，请用更精确的文件夹名。命中：",
+        "already_enabled": "• {0} 已处于启用状态，跳过。",
+        "already_disabled": "• {0} 已处于屏蔽状态，跳过。",
+        "move_failed": "✗ 剪切失败 {0}: {1}",
+        "moved": "✓ 已{0}: {1}  →  {2}",
+        "action_enable": "启用",
+        "action_disable": "屏蔽",
+        "category_set": "✓ 已把 [{0}] 分类为: {1或未分类}",
+        "note_set": "✓ 已给 [{0}] 写备注: {1}",
+        "pin_set": "✓ 已把 [{0}] 的收藏分类设为: {1}",
+        "starred_on": "☆ 收藏",
+        "starred_off": "★ 取消收藏",
+        "display_name_set": "✓ 已设置 [{0}] 的工具内显示名: {1}",
+        "import_ok": "✓ 已导入 {0} 条档案（新分类 {1} 个，跳过 {2} 条）。",
+        "unmatched": "  未匹配：",
+        "new_categories": "  新增分类：{0}",
+        "no_need_classify": "✓ 没有需要分类的 skill（都已分类且有简介）。仍生成了空任务文件供参考。",
+        "ai_task_generated": "✓ 已生成 AI 分类任务文件: {0}（{1} 个待分类 skill，已分类的已自动跳过）",
+        "ai_task_hint": "  把这份文件丢给 AI，AI 填好后原样拿回来导入即可。",
+        "exit": "退出。",
+        "unknown_cmd": "未知命令: {0}",
+        "no_hits": "没有属于分类「{0}」的 skill。",
+        "hits_count": "分类「{0}」共 {1} 个:",
+        "skills_root": "skill 根目录: {0}",
+        "count_summary": "已安装 {0} 个，已屏蔽 {1} 个，合计 {2} 个",
+        "installed_first": "（已安装在前 {0} 条，其后为已屏蔽）",
+        "rescan_done": "重新扫描建档完成。",
+        "json_parse_failed": "✗ 无法解析 JSON: {0}",
+        "no_valid_skills": "✗ 文件里没有有效的 skills 对象。",
+        "entry_not_object": "条目不是对象",
+        "skill_not_found": "找不到对应 skill",
+        "category_name_empty": "分类名不能为空",
+        "root_missing": "✗ skill 根目录不存在: {0}",
+        "root_override": "  可用环境变量 DSH_SKILLS_ROOT 覆盖。",
+        "need_skill_arg": "需要 --skill 参数",
+        "need_skill_cat": "需要 --skill 与 --cat 参数",
+        "need_skill_note": "需要 --skill 与 --note 参数",
+        "need_filter_arg": "需要 --filter 参数",
+        "need_file_arg": "需要 --file 参数（AI 分类 JSON 路径）",
+        "unknown_action": "未知动作: {0}",
+        "lang_choice_zh": "中文",
+        "lang_choice_en": "English",
+        "lang_switched": "语言已切换为 {}",
+        "lang_pick_use": "用法: skill_manager.py lang --lang en|zh （或设环境变量 DSH_SKILLS_LANG）",
+        "lang_save_failed": "✗ 未能保存语言设置: {0}",
+        "restore_original": "(还原为原名)",
+        "ai_task_instructions": "请为下面每个 skill 填写 category（分类名）、description（一句中文简介，用你自己的话、不要照抄 source_description）、note（选填备注）。source_description 与 needs 仅供你参考，不要改。只输出并更新这份 JSON 文件，不要额外解释。",
+    },
+    "en": {
+        "enabled": "enabled",
+        "disabled": "disabled",
+        "tag_on": "[ON]",
+        "tag_off": "[OFF]",
+        "uncategorized": "uncategorized",
+        "no_description": "(no description)",
+        "desc_from_ai": "AI",
+        "desc_from_skillmd": "SKILL.md",
+        "not_found": "✗ skill not found: {0}",
+        "multiple_match": "⚠ Multiple skills match this name; use a more specific folder name. Matches:",
+        "already_enabled": "• {0} is already enabled, skipped.",
+        "already_disabled": "• {0} is already disabled, skipped.",
+        "move_failed": "✗ Move failed for {0}: {1}",
+        "moved": "✓ {0}: {1}  →  {2}",
+        "action_enable": "enabled",
+        "action_disable": "disabled",
+        "category_set": "✓ Set [{0}] category to: {1}",
+        "note_set": "✓ Set note for [{0}]: {1}",
+        "pin_set": "✓ Set [{0}] favorites-category to: {1}",
+        "starred_on": "☆ Starred",
+        "starred_off": "★ Unstarred",
+        "display_name_set": "✓ Set [{0}] display name to: {1}",
+        "import_ok": "✓ Imported {0} entries (new categories {1}, skipped {2}).",
+        "unmatched": "  Unmatched:",
+        "new_categories": "  New categories: {0}",
+        "no_need_classify": "✓ Nothing needs classifying (all classified & described). Still generated an empty task file for reference.",
+        "ai_task_generated": "✓ Generated AI classify task file: {0} ({1} skills to classify; already-done ones were skipped)",
+        "ai_task_hint": "  Hand this file to an AI; have it fill it in and return it for import.",
+        "exit": "Exit.",
+        "unknown_cmd": "Unknown command: {0}",
+        "no_hits": "No skills in category \"{0}\".",
+        "hits_count": "Category \"{0}\": {1} skills",
+        "skills_root": "skills root: {0}",
+        "count_summary": "{0} installed, {1} disabled, {2} total",
+        "installed_first": "(installed first {0} rows, disabled after)",
+        "rescan_done": "Rescan complete.",
+        "json_parse_failed": "✗ Failed to parse JSON: {0}",
+        "no_valid_skills": "✗ No valid 'skills' object in the file.",
+        "entry_not_object": "entry is not an object",
+        "skill_not_found": "no matching skill",
+        "category_name_empty": "category name cannot be empty",
+        "root_missing": "✗ Skills root does not exist: {0}",
+        "root_override": "  Override with the DSH_SKILLS_ROOT env var.",
+        "need_skill_arg": "Need --skill argument",
+        "need_skill_cat": "Need --skill and --cat arguments",
+        "need_skill_note": "Need --skill and --note arguments",
+        "need_filter_arg": "Need --filter argument",
+        "need_file_arg": "Need --file argument (AI classify JSON path)",
+        "unknown_action": "Unknown action: {0}",
+        "lang_choice_zh": "Chinese",
+        "lang_choice_en": "English",
+        "lang_switched": "Language switched to {}",
+        "lang_pick_use": "Usage: skill_manager.py lang --lang en|zh  (or set env DSH_SKILLS_LANG)",
+        "lang_save_failed": "✗ Failed to save language setting: {0}",
+        "restore_original": "(back to original name)",
+        "ai_task_instructions": "For each skill below, fill in category (a short category name), description (one short English description, in your own words, do NOT copy source_description), and note (optional). source_description and needs are for your reference only — do not modify them. Only output/update this JSON file; do not add extra explanation.",
+    },
+}
+
+
+def T(key: str, *args) -> str:
+    """翻译：取当前语言下的文案，支持 str.format 风格占位 {0}{1}…。"""
+    table = _STR.get(LANG, _STR["zh"])
+    s = table.get(key) or _STR["zh"].get(key) or key
+    if args:
+        try:
+            return s.format(*args)
+        except (IndexError, KeyError):
+            return s
+    return s
+
+
+def set_language(lang: str):
+    """设置全局语言。任何值非 en 一律回退到 zh。"""
+    global LANG
+    LANG = "en" if (lang or "").strip().lower() == "en" else "zh"
+
+
+def get_language() -> str:
+    return LANG
+
 
 def get_skills_root() -> Path:
     """skill 根目录：优先环境变量 DSH_SKILLS_ROOT，否则用默认值。"""
@@ -259,18 +408,18 @@ def skill_description(skill: dict, entry: dict) -> str:
     ai = (entry.get("ai_description") or "").strip()
     if ai:
         return ai
-    return skill.get("description") or "（无简介）"
+    return skill.get("description") or T("no_description")
 
 
 def display_line(skill: dict, entry: dict, idx: int):
-    tag = "[开]" if not skill["disabled"] else "[关]"
+    tag = T("tag_on") if not skill["disabled"] else T("tag_off")
     star = "*" if entry.get("starred") else " "
-    cat = (entry.get("category") or "未分类").strip()
+    cat = (entry.get("category") or T("uncategorized")).strip()
     folder = skill["folder"]
     name = skill["name"]
     desc = skill_description(skill, entry)
-    src = "AI" if (entry.get("ai_description") or "").strip() else "SKILL.md"
-    print(f"{idx:>3} {tag} {star} <{cat}>  {name}   [folder: {folder}] (简介:{src})")
+    src = T("desc_from_ai") if (entry.get("ai_description") or "").strip() else T("desc_from_skillmd")
+    print(f"{idx:>3} {tag} {star} <{cat}>  {name}   [folder: {folder}] (summary:{src})")
     print(f"      ↳ {desc}")
 
 
@@ -278,8 +427,8 @@ def show_all(root: Path):
     installed, disabled = scan_skills(root)
     archive = load_archive()
     print("=" * 70)
-    print(f"skill 根目录: {root}")
-    print(f"已安装 {len(installed)} 个，已屏蔽 {len(disabled)} 个，合计 {len(installed)+len(disabled)} 个")
+    print(T("skills_root", root))
+    print(T("count_summary", len(installed), len(disabled), len(installed) + len(disabled)))
     print("=" * 70)
 
     idx = 0
@@ -296,7 +445,7 @@ def show_all(root: Path):
     print("=" * 70)
     # 把本次扫描自动发现的新 skill 落盘进档案
     save_archive(archive)
-    print(f"（已安装在前 {len(installed)} 条，其后为已屏蔽）")
+    print(T("installed_first", len(installed)))
 
 
 # ---------------------------------------------------------------------------
@@ -316,14 +465,14 @@ def toggle(root: Path, selector: str, target_state: str) -> bool:
     matches = [s for s in installed + disabled if
                s["folder"] == selector or s["name"] == selector]
     if not matches:
-        print(f"✗ 找不到 skill: {selector}")
+        print(T("not_found", selector))
         return False
 
     # 若同名字命中多个，让用户选（通常用文件夹名最准）
     if len(matches) > 1:
-        print(f"⚠ 存在多个同名字面量匹配，请用更精确的文件夹名。命中：")
+        print(T("multiple_match"))
         for m in matches:
-            print(f"   - {m['folder']}  ({'已安装' if not m['disabled'] else '已屏蔽'})")
+            print(f"   - {m['folder']}  ({T('enabled') if not m['disabled'] else T('disabled')})")
         return False
 
     skill = matches[0]
@@ -331,10 +480,10 @@ def toggle(root: Path, selector: str, target_state: str) -> bool:
     dest_root = root if target_state == "on" else disabled_dir
 
     if not skill["disabled"] and target_state == "on":
-        print(f"• {skill['name']} 已处于启用状态，跳过。")
+        print(T("already_enabled", skill["name"]))
         return True
     if skill["disabled"] and target_state == "off":
-        print(f"• {skill['name']} 已处于屏蔽状态，跳过。")
+        print(T("already_disabled", skill["name"]))
         return True
 
     # 目标路径计算：如果目标目录下已存在同名，改名加 _moved 后缀避免覆盖
@@ -346,11 +495,11 @@ def toggle(root: Path, selector: str, target_state: str) -> bool:
     try:
         shutil.move(str(src), str(dest_dir))
     except OSError as e:
-        print(f"✗ 剪切失败 {skill['name']}: {e}")
+        print(T("move_failed", skill["name"], e))
         return False
 
-    action = "启用" if target_state == "on" else "屏蔽"
-    print(f"✓ 已{action}: {skill['name']}  →  {dest_dir}")
+    action = T("action_enable") if target_state == "on" else T("action_disable")
+    print(T("moved", action, skill["name"], dest_dir))
     return True
 
 
@@ -369,32 +518,32 @@ def get_skill_by_selector(root: Path, selector: str):
 def set_category(root: Path, selector: str, category: str):
     s = get_skill_by_selector(root, selector)
     if not s:
-        print(f"✗ 找不到 skill: {selector}")
+        print(T("not_found", selector))
         return
     archive = load_archive()
     entry = ensure_archive_entry(archive, s)
     entry["category"] = category.strip()
     save_archive(archive)
-    print(f"✓ 已把 [{s['name']}] 分类为: {category.strip() or '未分类'}")
+    print(T("category_set", s["name"], category.strip() or T("uncategorized")))
 
 
 def set_note(root: Path, selector: str, note: str):
     s = get_skill_by_selector(root, selector)
     if not s:
-        print(f"✗ 找不到 skill: {selector}")
+        print(T("not_found", selector))
         return
     archive = load_archive()
     entry = ensure_archive_entry(archive, s)
     entry["note"] = note.strip()
     save_archive(archive)
-    print(f"✓ 已给 [{s['name']}] 写备注: {note.strip()}")
+    print(T("note_set", s["name"], note.strip()))
 
 
 def set_pin_category(root: Path, selector: str, category: str):
     """设置某收藏 skill 在『收藏夹』里的独立分类（与原本分类并存、互不影响）。"""
     s = get_skill_by_selector(root, selector)
     if not s:
-        print(f"✗ 找不到 skill: {selector}")
+        print(T("not_found", selector))
         return
     archive = load_archive()
     entry = ensure_archive_entry(archive, s)
@@ -402,19 +551,19 @@ def set_pin_category(root: Path, selector: str, category: str):
     if not entry.get("starred"):
         entry["starred"] = True  # 归入收藏夹分类即视为收藏
     save_archive(archive)
-    print(f"✓ 已把 [{s['name']}] 的收藏分类设为: {category.strip().strip('/') or '（未分类收藏）'}")
+    print(T("pin_set", s["name"], category.strip().strip("/") or T("uncategorized")))
 
 
 def toggle_star(root: Path, selector: str):
     s = get_skill_by_selector(root, selector)
     if not s:
-        print(f"✗ 找不到 skill: {selector}")
+        print(T("not_found", selector))
         return
     archive = load_archive()
     entry = ensure_archive_entry(archive, s)
     entry["starred"] = not entry.get("starred", False)
     save_archive(archive)
-    print(f"{'☆ 收藏' if entry['starred'] else '★ 取消收藏'}: {s['name']}")
+    print(f"{T('starred_on') if entry['starred'] else T('starred_off')}: {s['name']}")
 
 
 def display_name(skill: dict, entry: dict) -> str:
@@ -427,13 +576,13 @@ def set_display_name(root: Path, selector: str, name: str):
     """设置工具内显示名（仅存档案，不修改原 SKILL.md 的 name/frontmatter）。"""
     s = get_skill_by_selector(root, selector)
     if not s:
-        print(f"✗ 找不到 skill: {selector}")
+        print(T("not_found", selector))
         return
     archive = load_archive()
     entry = ensure_archive_entry(archive, s)
     entry["display_name"] = name.strip()
     save_archive(archive)
-    print(f"✓ 已设置 [{s['name']}] 的工具内显示名: {name.strip() or '(还原为原名)'}")
+    print(T("display_name_set", s["name"], name.strip() or T("restore_original")))
 
 
 def list_categories(root: Path) -> list:
@@ -478,7 +627,7 @@ def add_category(root: Path, parent: str, name: str) -> str:
     parent = (parent or "").strip().strip("/")
     name = (name or "").strip().strip("/")
     if not name:
-        raise ValueError("分类名不能为空")
+        raise ValueError(T("category_name_empty"))
     full = f"{parent}/{name}" if parent else name
     tree = set(load_category_tree())
     tree.add(full)
@@ -590,17 +739,17 @@ def import_ai_file(root: Path, filepath) -> dict:
     """读取 AI 生成的分类 JSON，合并进档案。返回 {matched, created_categories, skipped}。"""
     p = Path(filepath)
     if not p.exists():
-        print(f"✗ 文件不存在: {filepath}")
+        print(T("not_found", filepath))
         return {}
     try:
         data = json.loads(p.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as e:
-        print(f"✗ 无法解析 JSON: {e}")
+        print(T("json_parse_failed", e))
         return {}
 
     skills_map = data.get("skills") if isinstance(data, dict) else None
     if not isinstance(skills_map, dict) or not skills_map:
-        print("✗ 文件里没有有效的 skills 对象。")
+        print(T("no_valid_skills"))
         return {}
 
     installed, disabled = scan_skills(root)
@@ -615,12 +764,12 @@ def import_ai_file(root: Path, filepath) -> dict:
 
     for sid, payload in skills_map.items():
         if not isinstance(payload, dict):
-            skipped.append((sid, "条目不是对象"))
+            skipped.append((sid, T("entry_not_object")))
             continue
         # 定位 skill：先按文件夹名，再按名字
         skill = by_folder.get(str(sid)) or by_name.get(str(sid))
         if not skill:
-            skipped.append((str(sid), "找不到对应 skill"))
+            skipped.append((str(sid), T("skill_not_found")))
             continue
         entry = ensure_archive_entry(archive, skill)
         if payload.get("category"):
@@ -635,13 +784,13 @@ def import_ai_file(root: Path, filepath) -> dict:
         matched += 1
 
     save_archive(archive)
-    print(f"✓ 已导入 {matched} 条档案（新分类 {len(new_categories)} 个，跳过 {len(skipped)} 条）。")
+    print(T("import_ok", matched, len(new_categories), len(skipped)))
     if skipped:
-        print("  未匹配：")
+        print(T("unmatched"))
         for sid, why in skipped:
             print(f"    - {sid}  ({why})")
     if new_categories:
-        print("  新增分类：" + "、".join(sorted(new_categories)))
+        print(T("new_categories", "、".join(sorted(new_categories))))
     return {"matched": matched, "skipped": skipped, "new_categories": new_categories}
 
 
@@ -671,7 +820,7 @@ def export_ai_task(root: Path, include_all: bool = False) -> Path:
 
     out = {
         "version": 1,
-        "task": "请为下面每个 skill 填写 category（分类名）、description（一句中文简介）、note（选填备注）。description 不要照抄 source_description，用你自己的话一句话讲清楚它做什么、何时用。source_description 与 needs 仅供你参考，不要改。只输出并更新这份 JSON 文件即可，不要额外解释。",
+        "task": T("ai_task_instructions"),
         "generated_by": "AI",
         "generated_at": "",
         "skills": {},
@@ -687,7 +836,7 @@ def export_ai_task(root: Path, include_all: bool = False) -> Path:
         out["skills"][s["name"]] = {
             "source_description": skill_description(s, entry),
             "source_category": entry.get("category") or "",
-            "needs": "分类+简介" if need else "刷新",
+            "needs": "category+description" if need else "refresh",
             "category": entry.get("category") or "",
             "description": entry.get("ai_description") or "",
             "note": entry.get("note") or "",
@@ -697,14 +846,14 @@ def export_ai_task(root: Path, include_all: bool = False) -> Path:
         get_data_dir().mkdir(parents=True, exist_ok=True)
         dest = get_data_dir() / "ai_classify_task.json"
         dest.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")
-        print("✓ 没有需要分类的 skill（都已分类且有简介）。仍生成了空任务文件供参考。")
+        print(T("no_need_classify"))
         return dest
 
     get_data_dir().mkdir(parents=True, exist_ok=True)
     dest = get_data_dir() / "ai_classify_task.json"
     dest.write_text(json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"✓ 已生成 AI 分类任务文件: {dest}（{pending} 个待分类 skill，已分类的已自动跳过）")
-    print("  把这份文件丢给 AI，AI 填好后原样拿回来导入即可。")
+    print(T("ai_task_generated", dest, pending))
+    print(T("ai_task_hint"))
     return dest
 
 
@@ -717,68 +866,138 @@ def export_import_template(root: Path, include_all: bool = False) -> Path:
 # 交互菜单
 # ---------------------------------------------------------------------------
 
-MENU_TEXT = """
-┌─────────────────────────────────────────────┐
-│  dsh-skill-manager                           │
-│  1  显示全部 skill（含简介/分类）             │
-│  2  启用 skill   (ON)                        │
-│  3  屏蔽 skill   (OFF)                       │
-│  4  分类 skill                               │
-│  5  写备注 skill                             │
-│  6  收藏/取消收藏                            │
-│  7  按分类筛选查看                           │
-│  8  刷新 & 重新建档                          │
-│  9  帮助/说明                                │
-│  0  退出                                     │
-└─────────────────────────────────────────────┘
-"""
+_MENU_ROWS = {
+    "zh": [
+        ("1", "显示全部 skill（含简介/分类）"),
+        ("2", "启用 skill   (ON)"),
+        ("3", "屏蔽 skill   (OFF)"),
+        ("4", "分类 skill"),
+        ("5", "写备注 skill"),
+        ("6", "收藏/取消收藏"),
+        ("7", "按分类筛选查看"),
+        ("8", "刷新 & 重新建档"),
+        ("9", "帮助/说明"),
+        ("L", "切换语言 (中/EN)"),
+        ("0", "退出"),
+    ],
+    "en": [
+        ("1", "Show all skills (summary/category)"),
+        ("2", "Enable skill   (ON)"),
+        ("3", "Disable skill  (OFF)"),
+        ("4", "Categorize skill"),
+        ("5", "Set note for skill"),
+        ("6", "Star / unstar skill"),
+        ("7", "Filter by category"),
+        ("8", "Rescan & rebuild archive"),
+        ("9", "Help"),
+        ("L", "Switch language (中/EN)"),
+        ("0", "Exit"),
+    ],
+}
+
+
+def menu_text() -> str:
+    rows = _MENU_ROWS.get(LANG, _MENU_ROWS["zh"])
+    line = "┌─────────────────────────────────────────────┐"
+    title = "│  dsh-skill-manager（Language: " + ("中文" if LANG == "zh" else "English") + "）" 
+    title = title.ljust(48, " ") + "│"
+    parts = [line, title]
+    for num, label in rows:
+        row = f"│  {num}  {label}"
+        row = row.ljust(48, " ") + "│"
+        parts.append(row)
+    parts.append("└─────────────────────────────────────────────┘")
+    return "\n".join(parts)
+
+
+def _prompt(key: str) -> str:
+    """返回基于当前语言的输入提示文案。"""
+    prompts = {
+        "zh": {
+            "enable": "输入要启用的 skill（文件夹名/名字）: ",
+            "disable": "输入要屏蔽的 skill（文件夹名/名字）: ",
+            "categorize": "输入要分类的 skill: ",
+            "cat_name": "分类名（回车清空）: ",
+            "note": "输入要写备注的 skill: ",
+            "note_content": "备注内容（回车清空）: ",
+            "star": "输入要收藏/取消的 skill: ",
+            "filter": "输入分类名筛选: ",
+            "lang_pick": "输入语言 en / zh（回车取消）: ",
+            "lang_set": "语言已切换为 {}",
+        },
+        "en": {
+            "enable": "Skill to enable (folder/name): ",
+            "disable": "Skill to disable (folder/name): ",
+            "categorize": "Skill to categorize: ",
+            "cat_name": "Category name (Enter to clear): ",
+            "note": "Skill to add a note to: ",
+            "note_content": "Note content (Enter to clear): ",
+            "star": "Skill to star/unstar: ",
+            "filter": "Category name to filter by: ",
+            "lang_pick": "Enter language 'en' or 'zh' (Enter to cancel): ",
+            "lang_set": "Language switched to {}",
+        },
+    }
+    tbl = prompts.get(LANG, prompts["zh"])
+    return tbl.get(key, prompts["zh"].get(key, key))
 
 
 def interactive(root: Path):
-    print(MENU_TEXT)
+    print(menu_text())
     while True:
         try:
             cmd = input("\n> ").strip().lower()
         except (EOFError, KeyboardInterrupt):
-            print("\n退出。")
+            print("\n" + T("exit"))
             break
         if cmd in ("0", "q", "exit", "quit"):
-            print("退出。")
+            print(T("exit"))
             break
         elif cmd == "1":
             show_all(root)
         elif cmd == "2":
-            selector = input("输入要启用的 skill（文件夹名/名字）: ").strip()
+            selector = input(_prompt("enable")).strip()
             if selector:
                 toggle(root, selector, "on")
         elif cmd == "3":
-            selector = input("输入要屏蔽的 skill（文件夹名/名字）: ").strip()
+            selector = input(_prompt("disable")).strip()
             if selector:
                 toggle(root, selector, "off")
         elif cmd == "4":
-            selector = input("输入要分类的 skill: ").strip()
-            cat = input("分类名（回车清空）: ").strip()
+            selector = input(_prompt("categorize")).strip()
+            cat = input(_prompt("cat_name")).strip()
             if selector:
                 set_category(root, selector, cat)
         elif cmd == "5":
-            selector = input("输入要写备注的 skill: ").strip()
-            note = input("备注内容（回车清空）: ").strip()
+            selector = input(_prompt("note")).strip()
+            note = input(_prompt("note_content")).strip()
             if selector:
                 set_note(root, selector, note)
         elif cmd == "6":
-            selector = input("输入要收藏/取消的 skill: ").strip()
+            selector = input(_prompt("star")).strip()
             if selector:
                 toggle_star(root, selector)
         elif cmd == "7":
-            cat = input("输入分类名筛选: ").strip()
+            cat = input(_prompt("filter")).strip()
             show_by_category(root, cat)
         elif cmd == "8":
-            print("重新扫描建档完成。")
+            print(T("rescan_done"))
             show_all(root)
         elif cmd == "9":
-            print(MENU_TEXT)
+            print(menu_text())
+        elif cmd in ("l", "lang", "language", "语言"):
+            pick = input(_prompt("lang_pick")).strip().lower()
+            if pick in ("en", "zh"):
+                set_language(pick)
+                try:
+                    save_config({"lang": LANG})
+                except Exception:
+                    pass
+                print(_prompt("lang_set").format("English" if LANG == "en" else "中文"))
+            else:
+                print(T("exit"))
         else:
-            print(f"未知命令: {cmd}")
+            print(T("unknown_cmd", cmd))
 
 
 def show_by_category(root: Path, category: str):
@@ -791,9 +1010,9 @@ def show_by_category(root: Path, category: str):
         if (entry.get("category") or "").strip() == cat:
             hits.append((s, entry))
     if not hits:
-        print(f"没有属于分类「{cat}」的 skill。")
+        print(T("no_hits", cat))
         return
-    print(f"分类「{cat}」共 {len(hits)} 个:")
+    print(T("hits_count", cat, len(hits)))
     for i, (s, e) in enumerate(hits, 1):
         display_line(s, e, i)
 
@@ -808,7 +1027,7 @@ def build_parser():
         description="DSH skill 管理工具（独立脚本，非插件）。档案存放在脚本旁的 data/ 目录。",
     )
     p.add_argument("action", nargs="?", default="menu",
-                   help="list|on|off|cat|note|star|filter|import|template|task|menu")
+                   help="list|on|off|cat|note|star|filter|import|template|task|lang|menu")
     p.add_argument("--skill", help="skill 文件夹名或名字")
     p.add_argument("--cat", help="分类名（配合 cat）")
     p.add_argument("--note", help="备注内容（配合 note）")
@@ -816,17 +1035,34 @@ def build_parser():
     p.add_argument("--file", help="AI 分类 JSON 文件路径（配合 import）")
     p.add_argument("--all", action="store_true",
                    help="template/task 时强制包含所有 skill（默认只含待分类的）")
+    p.add_argument("--lang", choices=["zh", "en"], default=None,
+                   help="界面语言：zh=中文（默认），en=English。优先于 config 与环境变量。")
     return p
 
 
+def _resolve_language(args_lang):
+    """按优先级决定语言：--lang 参数 > config.json 的 lang > 环境变量 DSH_SKILLS_LANG > 默认 zh。"""
+    if args_lang:
+        return args_lang
+    cfg = load_config()
+    if cfg.get("lang"):
+        return cfg["lang"]
+    env = os.environ.get("DSH_SKILLS_LANG")
+    if env:
+        return env
+    return "zh"
+
+
 def main():
+    args = build_parser().parse_args()
+    set_language(_resolve_language(args.lang))
+
     root = get_skills_root()
     if not root.exists():
-        print(f"✗ skill 根目录不存在: {root}")
-        print("  可用环境变量 DSH_SKILLS_ROOT 覆盖。")
+        print(T("root_missing", root))
+        print(T("root_override"))
         sys.exit(1)
 
-    args = build_parser().parse_args()
     action = args.action
 
     if action == "menu":
@@ -835,45 +1071,58 @@ def main():
         show_all(root)
     elif action == "on":
         if not args.skill:
-            print("需要 --skill 参数")
+            print(T("need_skill_arg"))
             sys.exit(1)
         toggle(root, args.skill, "on")
     elif action == "off":
         if not args.skill:
-            print("需要 --skill 参数")
+            print(T("need_skill_arg"))
             sys.exit(1)
         toggle(root, args.skill, "off")
     elif action == "cat":
         if not args.skill or not args.cat:
-            print("需要 --skill 与 --cat 参数")
+            print(T("need_skill_cat"))
             sys.exit(1)
         set_category(root, args.skill, args.cat)
     elif action == "note":
         if not args.skill or not args.note:
-            print("需要 --skill 与 --note 参数")
+            print(T("need_skill_note"))
             sys.exit(1)
         set_note(root, args.skill, args.note)
     elif action == "star":
         if not args.skill:
-            print("需要 --skill 参数")
+            print(T("need_skill_arg"))
             sys.exit(1)
         toggle_star(root, args.skill)
     elif action == "filter":
         if not args.filter:
-            print("需要 --filter 参数")
+            print(T("need_filter_arg"))
             sys.exit(1)
         show_by_category(root, args.filter)
     elif action == "import":
         if not args.file:
-            print("需要 --file 参数（AI 分类 JSON 路径）")
+            print(T("need_file_arg"))
             sys.exit(1)
         import_ai_file(root, args.file)
     elif action == "template":
         export_import_template(root, include_all=args.all)
     elif action == "task":
         export_ai_task(root, include_all=args.all)
+    elif action == "lang":
+        # 用法：skill_manager.py lang --lang en|zh —— 切换并记住语言设置
+        target = (args.lang or os.environ.get("DSH_SKILLS_LANG") or "").strip().lower()
+        if target not in ("en", "zh"):
+            print(T("lang_pick_use"))
+            sys.exit(1)
+        set_language(target)
+        try:
+            save_config({"lang": LANG})
+            print(T("lang_switched").format("English" if LANG == "en" else "中文"))
+        except Exception as e:
+            print(T("lang_save_failed", e))
+            sys.exit(1)
     else:
-        print(f"未知动作: {action}")
+        print(T("unknown_action", action))
         build_parser().print_help()
 
 

@@ -1,6 +1,21 @@
 # dsh-skill-manager
 
+> English · [中文说明](README.zh-CN.md)
+
 A small standalone CLI tool to organize your [DSH](https://github.com/asakuraki/) skills. It is **not a DSH plugin** — it simply moves skill folders between the root and a `_disabled\` folder so DSH can or cannot see them, and keeps your own archive of categories, notes, and favorites.
+
+The CLI interface is **fully bilingual (English / 中文)** and the language is remembered between runs.
+
+## Language
+
+The tool ships with both **English** and **Chinese** interfaces:
+
+- **Per-run flag**: `python skill_manager.py --lang en` or `--lang zh`
+- **Persist a choice**: `python skill_manager.py lang --lang en` (remembered for next runs)
+- **Interactive menu**: run `menu` and press `L`, then type `zh` or `en`
+- **Environment variable**: `DSH_SKILLS_LANG=en`
+
+Priority: `--lang` flag > `data\config.json` `lang` key > env `DSH_SKILLS_LANG` > default Chinese.
 
 ## How it works
 
@@ -61,6 +76,8 @@ Optional: `python fill_ai_task.py` auto-fills the file from a `SKILL-MANIFEST.md
 | `filter --filter C` | Show only skills in category C |
 | `import --file F` | Merge an AI-filled JSON into the archive |
 | `template [--all]` | Generate the AI task file (by default only unclassified skills) |
+| `lang --lang en\|zh` | Switch and remember the interface language |
+| `--lang en\|zh` | Set the interface language for this run |
 
 ## FAQ
 
