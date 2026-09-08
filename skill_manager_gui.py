@@ -36,6 +36,198 @@ import skill_manager as core  # noqa: E402
 
 
 # ---------------------------------------------------------------------------
+# GUI 界面国际化（中/英）
+# ---------------------------------------------------------------------------
+# 复用 core 的语言状态（core.LANG / core.set_language / core.save_config）。
+# 本文件用 gt(key, *args) 取 GUI 专用文案；语言切换时用重建窗口的方式刷新。
+
+_GUI = {
+    "zh": {
+        "app_name": "DSH Skill 管理器",
+        "window_title": "DSH Skill 管理器",
+        "tree_all": "全部",
+        "tree_installed": "已装",
+        "tree_disabled": "未装",
+        "tree_pinned": "收藏",
+        "pin_tooltip": "收藏分类「{0}」",
+        "drop_tooltip": "归类到「{0}」",
+        "no_description": "（无简介）",
+        "edit_title": "编辑 Skill（仅工具内生效）",
+        "field_name": "名字",
+        "field_desc": "简介",
+        "field_uncat": "（未分类）",
+        "field_category": "分类",
+        "field_note": "备注",
+        "edit_hint": "以上仅保存在本工具档案中，不会修改原 SKILL.md 的名字或内容。",
+        "btn_cancel": "取消",
+        "btn_save": "保存",
+        "toolbar": "主工具栏",
+        "search": "搜索",
+        "search_ph": "按名字/简介/文件夹过滤…",
+        "search_raw": "含原始说明",
+        "search_raw_tip": "勾选后，搜索也会匹配每个 skill 的原始英文说明/关键词",
+        "theme": "主题",
+        "theme_auto": "随系统",
+        "theme_light": "白天",
+        "theme_dark": "黑夜",
+        "btn_menu": "菜单",
+        "menu_ai": "AI 整理",
+        "menu_ai_gen": "① 生成 AI 分类任务",
+        "menu_ai_imp": "② 导入 AI 分类结果",
+        "menu_set_dir": "设置 skill 目录…",
+        "menu_refresh": "刷新",
+        "menu_cli": "用命令行打开",
+        "menu_lang": "语言 / Language",
+        "menu_lang_zh": "中文",
+        "menu_lang_en": "English",
+        "empty_hint": "这里还没有 skill。\n试试在左侧选其它分类，或用右上角滑块切换启停。",
+        "dlg_find_dir": "寻找 skill 目录",
+        "dlg_find_dir_body": "找不到 skill 目录：\n{0}\n\n是否选择你自己的 skill 目录？\n（选「否」则自动创建上面的默认目录）",
+        "dlg_bad_dir": "无法创建目录",
+        "dlg_bad_dir_body": "无法创建目录：\n{0}",
+        "dlg_choose_dir": "选择 DSH skill 根目录（含各 skill 子文件夹）",
+        "ctx_new_pin": "新建收藏分类",
+        "ctx_new_pin_sub": "新建收藏子分类",
+        "ctx_ren_pin": "重命名收藏分类",
+        "ctx_del_pin": "删除收藏分类",
+        "ctx_new": "新建分类",
+        "ctx_new_sub": "新建子分类",
+        "ctx_ren": "重命名分类",
+        "ctx_del": "删除分类",
+        "pin_tip": "点击收藏 / 取消收藏",
+        "new_cat_title": "新建分类",
+        "new_cat_label": "分类名：",
+        "new_cat_sub_label": "在「{0}」下新建子分类：",
+        "err_create": "无法创建",
+        "ren_cat_title": "重命名分类",
+        "ren_cat_label": "新的分类名：",
+        "del_cat_title": "删除分类",
+        "del_cat_body": "确定删除分类「{0}」吗？\n其下 skill 的归类将被清空（文件不受影响）。",
+        "new_pin_title": "新建收藏分类",
+        "new_pin_label": "收藏分类名：",
+        "new_pin_sub_label": "在「{0}」下新建收藏子分类：",
+        "ren_pin_title": "重命名收藏分类",
+        "ren_pin_label": "新的收藏分类名：",
+        "del_pin_title": "删除收藏分类",
+        "del_pin_body": "确定删除收藏分类「{0}」吗？\n其下 skill 会留在收藏夹（取消该收藏分类），文件不受影响。",
+        "gen_failed": "生成失败",
+        "gen_failed_body": "生成任务文件失败：\n{0}",
+        "task_ready": "任务文件已生成",
+        "task_ready_body": "已生成：\n{0}\n\n步骤：\n1. 把这份文件交给 AI，AI 会填好分类/简介。\n2. AI 把填好的文件原样还给你。\n3. 点「② 导入 AI 分类结果」选它即可同步。\n\n现在就打开文件吗？",
+        "ddl_ai_json": "选择 AI 生成的分类 JSON",
+        "import_done": "导入完成",
+        "import_done_body": "已导入 {0} 条档案。",
+        "import_skipped": "\n跳过 {0} 条。",
+        "cli_usage": "命令行用法",
+        "cli_usage_body": "使用 .venv 下的 python 运行：\n\n  .venv\\Scripts\\python.exe skill_manager.py list\n  .venv\\Scripts\\python.exe skill_manager.py menu\n\n或在 powershell 里直接使用 skill_manager.py 的 on/off/cat/note/star 等命令。",
+        "lang_welcome": "选择界面语言 / Choose language",
+        "lang_zh": "中文",
+        "lang_en": "English",
+        "lang_saved": "语言已切换为 {0}",
+    },
+    "en": {
+        "app_name": "DSH Skill Manager",
+        "window_title": "DSH Skill Manager",
+        "tree_all": "All",
+        "tree_installed": "Installed",
+        "tree_disabled": "Disabled",
+        "tree_pinned": "Favorites",
+        "pin_tooltip": "Favorite category \"{0}\"",
+        "drop_tooltip": "Move to \"{0}\"",
+        "no_description": "(no description)",
+        "edit_title": "Edit Skill (tool-internal only)",
+        "field_name": "Name",
+        "field_desc": "Description",
+        "field_uncat": "(uncategorized)",
+        "field_category": "Category",
+        "field_note": "Note",
+        "edit_hint": "The above is stored only in the tool's own archive; it does not modify the name/content of the original SKILL.md.",
+        "btn_cancel": "Cancel",
+        "btn_save": "Save",
+        "toolbar": "Main Toolbar",
+        "search": "Search",
+        "search_ph": "Filter by name/description/folder…",
+        "search_raw": "Include raw text",
+        "search_raw_tip": "When checked, search also matches each skill's raw English description/keywords",
+        "theme": "Theme",
+        "theme_auto": "System",
+        "theme_light": "Light",
+        "theme_dark": "Dark",
+        "btn_menu": "Menu",
+        "menu_ai": "AI organize",
+        "menu_ai_gen": "① Generate AI classification task",
+        "menu_ai_imp": "② Import AI result",
+        "menu_set_dir": "Set skills directory…",
+        "menu_refresh": "Refresh",
+        "menu_cli": "Open with CLI",
+        "menu_lang": "Language / 语言",
+        "menu_lang_zh": "中文",
+        "menu_lang_en": "English",
+        "empty_hint": "No skills here yet.\nTry another category on the left, or toggle the switch on a card.",
+        "dlg_find_dir": "Locate skills directory",
+        "dlg_find_dir_body": "Skills directory not found:\n{0}\n\nChoose your own skills directory? (Selecting No creates the default above)",
+        "dlg_bad_dir": "Cannot create directory",
+        "dlg_bad_dir_body": "Cannot create directory:\n{0}",
+        "dlg_choose_dir": "Choose the DSH skills root (contains the skill sub-folders)",
+        "ctx_new_pin": "New favorite category",
+        "ctx_new_pin_sub": "New favorite sub-category",
+        "ctx_ren_pin": "Rename favorite category",
+        "ctx_del_pin": "Delete favorite category",
+        "ctx_new": "New category",
+        "ctx_new_sub": "New sub-category",
+        "ctx_ren": "Rename category",
+        "ctx_del": "Delete category",
+        "pin_tip": "Click to favorite / unfavorite",
+        "new_cat_title": "New Category",
+        "new_cat_label": "Category name:",
+        "new_cat_sub_label": "New sub-category under \"{0}\":",
+        "err_create": "Cannot create",
+        "ren_cat_title": "Rename Category",
+        "ren_cat_label": "New category name:",
+        "del_cat_title": "Delete Category",
+        "del_cat_body": "Delete category \"{0}\"?\nIts skills will be uncategorized (files are not affected).",
+        "new_pin_title": "New Favorite Category",
+        "new_pin_label": "Favorite category name:",
+        "new_pin_sub_label": "New favorite sub-category under \"{0}\":",
+        "ren_pin_title": "Rename Favorite Category",
+        "ren_pin_label": "New favorite category name:",
+        "del_pin_title": "Delete Favorite Category",
+        "del_pin_body": "Delete favorite category \"{0}\"?\nIts skills stay in Favorites (this removes the favorite category); files are not affected.",
+        "gen_failed": "Generation failed",
+        "gen_failed_body": "Failed to generate task file:\n{0}",
+        "task_ready": "Task file generated",
+        "task_ready_body": "Generated:\n{0}\n\nSteps:\n1. Give this file to an AI; it fills in category/description.\n2. The AI returns the filled file to you.\n3. Click “② Import AI result” and select it to sync.\n\nOpen the file now?",
+        "ddl_ai_json": "Select the AI-generated classification JSON",
+        "import_done": "Import complete",
+        "import_done_body": "Imported {0} entries.",
+        "import_skipped": "\nSkipped {0} entries.",
+        "cli_usage": "CLI usage",
+        "cli_usage_body": "Run with the .venv python:\n\n  .venv\\Scripts\\python.exe skill_manager.py list\n  .venv\\Scripts\\python.exe skill_manager.py menu\n\nOr use on/off/cat/note/star etc. directly in powershell.",
+        "lang_welcome": "Select interface language / 选择界面语言",
+        "lang_zh": "中文",
+        "lang_en": "English",
+        "lang_saved": "Language switched to {0}",
+    },
+}
+
+
+def is_en() -> bool:
+    return core.get_language() == "en"
+
+
+def gt(key: str, *args) -> str:
+    """取当前语言下 GUI 文案，支持 {0}{1}…format。"""
+    table = _GUI.get(core.get_language(), _GUI["zh"]) if is_en() else _GUI["zh"]
+    s = table.get(key) or _GUI["zh"].get(key) or key
+    if args:
+        try:
+            return s.format(*args)
+        except (IndexError, KeyError):
+            return s
+    return s
+
+
+# ---------------------------------------------------------------------------
 # 主题（白天 / 黑夜 / 随系统）
 # ---------------------------------------------------------------------------
 
@@ -179,16 +371,16 @@ class CategoryTree(QTreeWidget):
         n_dis = n_all - n_inst
 
         n_pin = sum(1 for _s, e in self.app.all_skills if e.get("starred"))
-        for _text, tag, n in (("全部", self.CAT_ALL, n_all),
-                              ("已装", self.CAT_INSTALLED, n_inst),
-                              ("未装", self.CAT_DISABLED, n_dis)):
+        for _text, tag, n in ((gt("tree_all"), self.CAT_ALL, n_all),
+                              (gt("tree_installed"), self.CAT_INSTALLED, n_inst),
+                              (gt("tree_disabled"), self.CAT_DISABLED, n_dis)):
             it = QTreeWidgetItem([f"{_text}  ({n})"])
             it.setData(0, Qt.UserRole, tag)
             it.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsDropEnabled)
             root.addChild(it)
 
         # 「收藏」顶层节点（独立分类体系，与原分类并存）
-        pin_root = QTreeWidgetItem([f"收藏  ({n_pin})"])
+        pin_root = QTreeWidgetItem([f"{gt('tree_pinned')}  ({n_pin})"])
         pin_root.setData(0, Qt.UserRole, self.CAT_PINNED)
         pin_root.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable | Qt.ItemIsDropEnabled)
         pin_root.setExpanded(True)
@@ -212,7 +404,7 @@ class CategoryTree(QTreeWidget):
                     node.setData(0, Qt.UserRole, self.PIN_PREFIX + full)
                     node.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable
                                   | Qt.ItemIsDropEnabled)
-                    node.setToolTip(0, f"收藏分类「{full}」")
+                    node.setToolTip(0, gt("pin_tooltip", full))
                     parent_pool.addChild(node)
                     node.setExpanded(True)
                 parent_pool = node
@@ -241,7 +433,7 @@ class CategoryTree(QTreeWidget):
                     it.setData(0, Qt.UserRole, full)
                     it.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable
                                 | Qt.ItemIsDropEnabled | Qt.ItemIsDragEnabled)
-                    it.setToolTip(0, f"归类到「{full}」")
+                    it.setToolTip(0, gt("drop_tooltip", full))
                     pool.addChild(it)
                     if i == 0:
                         it.setExpanded(True)
@@ -327,31 +519,31 @@ class CategoryTree(QTreeWidget):
         menu = QMenu(self)
         is_magic = tag in (self.CAT_ALL, self.CAT_INSTALLED, self.CAT_DISABLED, self.CAT_PINNED)
         if tag == self.CAT_PINNED:
-            add = menu.addAction("新建收藏分类")
+            add = menu.addAction(gt("ctx_new_pin"))
             add.triggered.connect(lambda: self.app.new_pin_category("", it))
             menu.exec(self.viewport().mapToGlobal(pos))
             return
         is_pin = bool(tag and tag.startswith(self.PIN_PREFIX))
         if is_pin:
             full = tag[len(self.PIN_PREFIX):]
-            sub = menu.addAction("新建收藏子分类")
+            sub = menu.addAction(gt("ctx_new_pin_sub"))
             sub.triggered.connect(lambda: self.app.new_pin_category(full, it))
             menu.addSeparator()
-            ren = menu.addAction("重命名收藏分类")
+            ren = menu.addAction(gt("ctx_ren_pin"))
             ren.triggered.connect(lambda: self.app.rename_pin_category(full))
-            dele = menu.addAction("删除收藏分类")
+            dele = menu.addAction(gt("ctx_del_pin"))
             dele.triggered.connect(lambda: self.app.delete_pin_category(full))
             menu.exec(self.viewport().mapToGlobal(pos))
             return
-        add = menu.addAction("新建分类")
+        add = menu.addAction(gt("ctx_new"))
         add.triggered.connect(lambda: self.app.new_category(self._parent_of(tag)))
         if it is not None and not is_magic:
-            sub = menu.addAction("新建子分类")
+            sub = menu.addAction(gt("ctx_new_sub"))
             sub.triggered.connect(lambda: self.app.new_category(tag))
             menu.addSeparator()
-            ren = menu.addAction("重命名分类")
+            ren = menu.addAction(gt("ctx_ren"))
             ren.triggered.connect(lambda: self.app.rename_category(tag))
-            dele = menu.addAction("删除分类")
+            dele = menu.addAction(gt("ctx_del"))
             dele.triggered.connect(lambda: self.app.delete_category(tag))
         menu.exec(self.viewport().mapToGlobal(pos))
 
@@ -469,7 +661,7 @@ class PinButton(QWidget):
         self._pinned = False
         self.setFixedSize(34, 28)
         self.setCursor(Qt.PointingHandCursor)
-        self.setToolTip("点击收藏 / 取消收藏")
+        self.setToolTip(gt("pin_tip"))
 
     def set_pinned(self, pinned: bool):
         if self._pinned != bool(pinned):
@@ -545,7 +737,7 @@ class SkillCard(QFrame):
 
         # 第二行：简介（突出，字体加大）
         desc = core.skill_description(skill, entry)
-        self.desc_lbl = QLabel(desc if desc else "（无简介）")
+        self.desc_lbl = QLabel(desc if desc else gt("no_description"))
         self.desc_lbl.setWordWrap(True)
         self.desc_lbl.setProperty("class", "muted")
         self.desc_lbl.setStyleSheet(f"color:{self.app.theme.palette['muted']}; font-size:14px;")
@@ -620,7 +812,7 @@ class EditDialog(QDialog):
         self.app = app
         self.skill = skill
         self.entry = entry
-        self.setWindowTitle("编辑 Skill（仅工具内生效）")
+        self.setWindowTitle(gt("edit_title"))
         self.setMinimumWidth(460)
         self.setModal(True)
 
@@ -629,35 +821,35 @@ class EditDialog(QDialog):
         form.setContentsMargins(16, 16, 16, 16)
 
         self.name_edit = QLineEdit(app.display_name(skill, entry))
-        form.addRow("名字", self.name_edit)
+        form.addRow(gt("field_name"), self.name_edit)
 
         self.desc_edit = QTextEdit()
         self.desc_edit.setPlainText(core.skill_description(skill, entry))
         self.desc_edit.setFixedHeight(90)
-        form.addRow("简介", self.desc_edit)
+        form.addRow(gt("field_desc"), self.desc_edit)
 
         self.cat_combo = QComboBox()
         self.cat_combo.setEditable(True)
-        self.cat_combo.addItem("（未分类）", "")
+        self.cat_combo.addItem(gt("field_uncat"), "")
         for c in app.category_folders():
             self.cat_combo.addItem(c, c)
         cur = (entry.get("category") or "").strip()
         idx = self.cat_combo.findData(cur)
         self.cat_combo.setCurrentIndex(idx if idx >= 0 else 0)
-        form.addRow("分类", self.cat_combo)
+        form.addRow(gt("field_category"), self.cat_combo)
 
         self.note_edit = QLineEdit(entry.get("note") or "")
-        form.addRow("备注", self.note_edit)
+        form.addRow(gt("field_note"), self.note_edit)
 
-        hint = QLabel("以上仅保存在本工具档案中，不会修改原 SKILL.md 的名字或内容。")
+        hint = QLabel(gt("edit_hint"))
         hint.setStyleSheet(f"color:{app.theme.palette['muted']}; font-size:11px;")
         hint.setWordWrap(True)
         form.addRow(hint)
 
         btns = QHBoxLayout()
-        cancel = QPushButton("取消")
+        cancel = QPushButton(gt("btn_cancel"))
         cancel.clicked.connect(self.reject)
-        save = QPushButton("保存")
+        save = QPushButton(gt("btn_save"))
         save.setProperty("class", "accent")
         save.clicked.connect(self._save)
         btns.addStretch(1)
@@ -687,7 +879,7 @@ class EditDialog(QDialog):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("DSH Skill 管理器")
+        self.setWindowTitle(gt("window_title"))
         self.resize(1180, 760)
         self.setMinimumSize(860, 520)
 
@@ -733,10 +925,8 @@ class MainWindow(QMainWindow):
         if not root.exists():
             # 发送软件给他人：默认目录很可能不存在，引导选择或自动创建
             ret = QMessageBox.question(
-                self, "寻找 skill 目录",
-                f"找不到 skill 目录：\n{root}\n\n"
-                f"是否选择你自己的 skill 目录？\n"
-                f"（选「否」则自动创建上面的默认目录）",
+                self, gt("dlg_find_dir"),
+                gt("dlg_find_dir_body", root),
                 QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
             if ret == QMessageBox.Yes:
                 chosen = self._choose_skills_root()
@@ -746,11 +936,11 @@ class MainWindow(QMainWindow):
         try:
             core.ensure_disabled_dir(root)
         except OSError as e:  # noqa: BLE001
-            QMessageBox.warning(self, "无法创建目录", f"无法创建目录：\n{e}")
+            QMessageBox.warning(self, gt("dlg_bad_dir"), gt("dlg_bad_dir_body", e))
         return root
 
     def _choose_skills_root(self):
-        d = QFileDialog.getExistingDirectory(self, "选择 DSH skill 根目录（含各 skill 子文件夹）")
+        d = QFileDialog.getExistingDirectory(self, gt("dlg_choose_dir"))
         return Path(d) if d else None
 
     def _memorize_root(self, path: Path):
@@ -767,8 +957,8 @@ class MainWindow(QMainWindow):
         try:
             core.ensure_disabled_dir(chosen)
         except OSError as e:  # noqa: BLE001
-            QMessageBox.warning(self, "无法创建目录", f"无法创建目录：\n{e}")
-        self.setWindowTitle(f"DSH Skill 管理器 · {chosen}")
+            QMessageBox.warning(self, gt("dlg_bad_dir"), gt("dlg_bad_dir_body", e))
+        self.setWindowTitle(f"{gt('window_title')} · {chosen}")
         self.refresh_all(keep=CategoryTree.CAT_ALL)
 
     def _load_skills(self):
@@ -814,34 +1004,34 @@ class MainWindow(QMainWindow):
 
     # ---------- 工具栏 ----------
     def _build_toolbar(self):
-        tb = QToolBar("主工具栏", self)
+        tb = QToolBar(gt("toolbar"), self)
         tb.setMovable(False)
         self.addToolBar(tb)
 
-        title = QLabel("DSH Skill 管理器")
+        title = QLabel(gt("app_name"))
         title.setStyleSheet(f"font-size:15px; font-weight:700; color:{self.theme.palette['text']};")
         tb.addWidget(title)
         tb.addSeparator()
 
         # 顶部搜索框（实时过滤卡片）
-        tb.addWidget(QLabel("搜索"))
+        tb.addWidget(QLabel(gt("search")))
         self.search_edit = QLineEdit()
-        self.search_edit.setPlaceholderText("按名字/简介/文件夹过滤…")
+        self.search_edit.setPlaceholderText(gt("search_ph"))
         self.search_edit.setClearButtonEnabled(True)
         self.search_edit.setFixedWidth(220)
         self.search_edit.textChanged.connect(self._on_search)
         tb.addWidget(self.search_edit)
         # 是否连原始英文描述/关键词一起搜（默认严格，只搜名字/简介/文件夹）
-        self.search_raw_cb = QCheckBox("含原始说明")
-        self.search_raw_cb.setToolTip("勾选后，搜索也会匹配每个 skill 的原始英文说明/关键词")
+        self.search_raw_cb = QCheckBox(gt("search_raw"))
+        self.search_raw_cb.setToolTip(gt("search_raw_tip"))
         self.search_raw_cb.toggled.connect(self._on_search_mode)
         tb.addWidget(self.search_raw_cb)
 
         tb.addSeparator()
 
-        tb.addWidget(QLabel("主题"))
+        tb.addWidget(QLabel(gt("theme")))
         self.theme_combo = QComboBox()
-        self.theme_combo.addItems(["随系统", "白天", "黑夜"])
+        self.theme_combo.addItems([gt("theme_auto"), gt("theme_light"), gt("theme_dark")])
         self.theme_combo.setFixedWidth(96)
         self.theme_combo.currentIndexChanged.connect(self._on_theme_change)
         tb.addWidget(self.theme_combo)
@@ -849,23 +1039,43 @@ class MainWindow(QMainWindow):
         tb.addSeparator()
 
         # 「菜单」 —— 低频操作收二级
-        menu_btn = QPushButton("菜单")
+        menu_btn = QPushButton(gt("btn_menu"))
         menu_btn.setProperty("class", "plain")
         mb = QMenu(self)
-        ai_act = QAction("AI 整理", self)
+        ai_act = QAction(gt("menu_ai"), self)
         ai_act.triggered.connect(self._ai_menu)
         mb.addAction(ai_act)
-        dir_act = QAction("设置 skill 目录…", self)
+        dir_act = QAction(gt("menu_set_dir"), self)
         dir_act.triggered.connect(self.change_skills_root)
         mb.addAction(dir_act)
-        rep = QAction("刷新", self)
+        rep = QAction(gt("menu_refresh"), self)
         rep.triggered.connect(self.refresh_all)
         mb.addAction(rep)
-        cli = QAction("用命令行打开", self)
+        cli = QAction(gt("menu_cli"), self)
         cli.triggered.connect(self._open_cli)
         mb.addAction(cli)
+        # 语言切换
+        lang_menu = mb.addMenu(gt("menu_lang"))
+        zh_act = lang_menu.addAction(gt("lang_zh"))
+        zh_act.triggered.connect(lambda: self._switch_lang("zh"))
+        en_act = lang_menu.addAction(gt("lang_en"))
+        en_act.triggered.connect(lambda: self._switch_lang("en"))
         menu_btn.setMenu(mb)
         tb.addWidget(menu_btn)
+
+    def _switch_lang(self, lang: str):
+        """切换界面语言并重建窗口（重建以刷新所有文案）。"""
+        core.set_language(lang)
+        try:
+            core.save_config({"lang": core.get_language()})
+        except Exception:  # noqa: BLE001
+            pass
+        # 重建整个窗口以应用新语言
+        fn = globals().get("_REBUILD_FN")
+        if fn is not None:
+            fn()
+        else:
+            self.refresh_all()
 
     def _on_theme_change(self, idx):
         self.mode = ["auto", "light", "dark"][idx]
@@ -955,7 +1165,7 @@ class MainWindow(QMainWindow):
             shown += 1
         # 空状态
         if shown == 0:
-            empty = QLabel("这里还没有 skill。\n试试在左侧选其它分类，或用右上角滑块切换启停。")
+            empty = QLabel(gt("empty_hint"))
             empty.setAlignment(Qt.AlignCenter)
             empty.setStyleSheet(f"color:{self.theme.palette['muted']}; font-size:13px; padding:40px;")
             empty.setWordWrap(True)
@@ -978,8 +1188,8 @@ class MainWindow(QMainWindow):
 
     # ---------- 分类管理 ----------
     def new_category(self, parent):
-        name, ok = QInputDialog.getText(self, "新建分类",
-                                        "分类名：" if not parent else f"在「{parent}」下新建子分类：",
+        name, ok = QInputDialog.getText(self, gt("new_cat_title"),
+                                        gt("new_cat_label") if not parent else gt("new_cat_sub_label", parent),
                                         text="")
         if not ok or not name.strip():
             return
@@ -989,7 +1199,7 @@ class MainWindow(QMainWindow):
         try:
             core.add_category(self.root_path, parent, name)
         except ValueError as e:
-            QMessageBox.warning(self, "无法创建", str(e))
+            QMessageBox.warning(self, gt("err_create"), str(e))
             return
         self._load_skills()
         self.tree.rebuild(full)
@@ -998,7 +1208,7 @@ class MainWindow(QMainWindow):
 
     def rename_category(self, tag):
         base = tag.split("/")[-1]
-        name, ok = QInputDialog.getText(self, "重命名分类", "新的分类名：", text=base)
+        name, ok = QInputDialog.getText(self, gt("ren_cat_title"), gt("ren_cat_label"), text=base)
         if not ok or not name.strip():
             return
         new_full = "/".join([x for x in tag.split("/")[:-1] if x] + [name.strip().strip("/")])
@@ -1008,8 +1218,7 @@ class MainWindow(QMainWindow):
 
     def delete_category(self, tag):
         ret = QMessageBox.question(
-            self, "删除分类",
-            f"确定删除分类「{tag}」吗？\n其下 skill 的归类将被清空（文件不受影响）。",
+            self, gt("del_cat_title"), gt("del_cat_body", tag),
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if ret != QMessageBox.Yes:
             return
@@ -1024,9 +1233,8 @@ class MainWindow(QMainWindow):
         self.refresh_all(keep=self.tree.current_target())
 
     def new_pin_category(self, parent, item):
-        name, ok = QInputDialog.getText(self, "新建收藏分类",
-                                        "收藏分类名：" if not parent
-                                        else f"在「{parent}」下新建收藏子分类：", text="")
+        name, ok = QInputDialog.getText(self, gt("new_pin_title"),
+                                        gt("new_pin_label") if not parent else gt("new_pin_sub_label", parent), text="")
         if not ok or not name.strip():
             return
         name = name.strip().strip("/")
@@ -1035,7 +1243,7 @@ class MainWindow(QMainWindow):
 
     def rename_pin_category(self, full):
         base = full.split("/")[-1]
-        name, ok = QInputDialog.getText(self, "重命名收藏分类", "新的收藏分类名：", text=base)
+        name, ok = QInputDialog.getText(self, gt("ren_pin_title"), gt("ren_pin_label"), text=base)
         if not ok or not name.strip():
             return
         new_full = "/".join([x for x in full.split("/")[:-1] if x] + [name.strip().strip("/")])
@@ -1050,8 +1258,7 @@ class MainWindow(QMainWindow):
 
     def delete_pin_category(self, full):
         ret = QMessageBox.question(
-            self, "删除收藏分类",
-            f"确定删除收藏分类「{full}」吗？\n其下 skill 会留在收藏夹（取消该收藏分类），文件不受影响。",
+            self, gt("del_pin_title"), gt("del_pin_body", full),
             QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if ret != QMessageBox.Yes:
             return
@@ -1082,9 +1289,9 @@ class MainWindow(QMainWindow):
     # ---------- AI 整理（二级菜单） ----------
     def _ai_menu(self):
         m = QMenu(self)
-        gen = m.addAction("① 生成 AI 分类任务")
+        gen = m.addAction(gt("menu_ai_gen"))
         gen.triggered.connect(self._gen_ai_task)
-        imp = m.addAction("② 导入 AI 分类结果")
+        imp = m.addAction(gt("menu_ai_imp"))
         imp.triggered.connect(self._imp_ai_file)
         m.exec(self.mapToGlobal(self.rect().topLeft()))
 
@@ -1092,14 +1299,10 @@ class MainWindow(QMainWindow):
         try:
             dest = core.export_ai_task(self.root_path)
         except Exception as e:  # noqa: BLE001
-            QMessageBox.critical(self, "生成失败", f"生成任务文件失败：\n{e}")
+            QMessageBox.critical(self, gt("gen_failed"), gt("gen_failed_body", e))
             return
         what = QMessageBox.question(
-            self, "任务文件已生成",
-            f"已生成：\n{dest}\n\n步骤：\n"
-            f"1. 把这份文件交给 AI，AI 会填好分类/简介。\n"
-            f"2. AI 把填好的文件原样还给你。\n"
-            f"3. 点「② 导入 AI 分类结果」选它即可同步。\n\n现在就打开文件吗？",
+            self, gt("task_ready"), gt("task_ready_body", dest),
             QMessageBox.Yes | QMessageBox.No)
         if what == QMessageBox.Yes:
             try:
@@ -1109,32 +1312,72 @@ class MainWindow(QMainWindow):
 
     def _imp_ai_file(self):
         path, _f = QFileDialog.getOpenFileName(
-            self, "选择 AI 生成的分类 JSON", str(core.get_data_dir()),
+            self, gt("ddl_ai_json"), str(core.get_data_dir()),
             "JSON 文件 (*.json);;所有文件 (*.*)")
         if not path:
             return
         res = core.import_ai_file(self.root_path, path)
         self.refresh_all()
         if res and res.get("matched"):
-            QMessageBox.information(self, "导入完成",
-                                    f"已导入 {res['matched']} 条档案。"
-                                    + (f"\n跳过 {len(res['skipped'])} 条。" if res.get("skipped") else ""))
+            body = gt("import_done_body", res["matched"])
+            if res.get("skipped"):
+                body += gt("import_skipped", len(res["skipped"]))
+            QMessageBox.information(self, gt("import_done"), body)
 
     def _open_cli(self):
-        QMessageBox.information(
-            self, "命令行用法",
-            "使用 .venv 下的 python 运行：\n\n"
-            "  .venv\\Scripts\\python.exe skill_manager.py list\n"
-            "  .venv\\Scripts\\python.exe skill_manager.py menu\n\n"
-            "或在 powershell 里直接使用 skill_manager.py 的 on/off/cat/note/star 等命令。")
+        QMessageBox.information(self, gt("cli_usage"), gt("cli_usage_body"))
+
+
+def _pick_language_if_unset(app):
+    """首次启动（config 里还没有 lang）弹窗让用户选中/英文，记住选择。"""
+    cfg = core.load_config()
+    if cfg.get("lang") in ("zh", "en"):
+        core.set_language(cfg["lang"])
+        return
+    env = os.environ.get("DSH_SKILLS_LANG")
+    if env and env.strip().lower() in ("zh", "en"):
+        core.set_language(env.strip().lower())
+        return
+    # 默认中文；用对话框让用户选
+    box = QMessageBox()
+    box.setWindowTitle("DSH Skill 管理器")
+    box.setText("选择界面语言 / Choose interface language")
+    zh = box.addButton(gt("lang_zh"), QMessageBox.AcceptRole)
+    en = box.addButton(gt("lang_en"), QMessageBox.AcceptRole)
+    box.exec()
+    chosen = box.clickedButton()
+    lang = "en" if chosen is en else "zh"
+    core.set_language(lang)
+    try:
+        core.save_config({"lang": lang})
+    except Exception:  # noqa: BLE001
+        pass
 
 
 def main():
     QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
     app = QApplication(sys.argv)
-    app.setApplicationName("DSH Skill 管理器")
-    window = MainWindow()
-    window.show()
+    app.setApplicationName(gt("app_name"))
+
+    # 首次启动选语言（之后从 config 记忆）
+    _pick_language_if_unset(app)
+
+    def _open_window():
+        w = MainWindow()
+        globals()["_WINDOW"] = w
+        w.show()
+        return w
+
+    def _rebuild():
+        old = globals().get("_WINDOW")
+        if old is not None:
+            old.close()
+            old.deleteLater()
+        _open_window()
+
+    globals()["_REBUILD_FN"] = _rebuild
+    _open_window()
+
     sys.exit(app.exec())
 
 
